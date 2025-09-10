@@ -1,0 +1,275 @@
+1st q = init method 
+```
+class Animal:
+    def __init__(self, name: str, type_: str, top_speed: float):
+        self._name = name
+        self._type = type_
+        self._top_speed = top_speed
+        self._current_speed = 0.0
+
+```
+2nd = get_current_seppd method that reutnrs the speed of the animal 
+	returs the current speed of the animal in ss-1. returns current speed of the animal. \
+
+```
+def get_current_speed(self):
+    """Returns the current speed of the animal in s⁻¹."""
+    return self._current_speed
+
+```
+3rd = speed of this animal directicly;. 
+Paramaters. 
+```
+ def __init__(self, name: str, type_: str, top_speed: float):
+        """
+        Initializes an Animal instance.
+
+        Parameters:
+            name (str): The name of the animal.
+            type_ (str): The type of the animal (e.g., mammal, reptile).
+            top_speed (float): The top speed of the animal.
+        """
+        self._name = name
+        self._type = type_
+        self._top_speed = top_speed
+        self._current_speed = 0.0
+```
+
+4th complete the method comment. 
+q4: implement the two tother accessor getteor methods fotr this class. 
+```
+    def get_name(self) -> str:
+        """Returns the name of the animal."""
+        return self._name
+
+    def get_type(self) -> str:
+        """Returns the type of the animal."""
+        return self._type
+
+```
+
+q5: implement a speed_up method that updates the `_current_speed ` of the animal after a given number of seconds of a given positive acceleration. the equation for the final speed is v = u + at where a is accelarion, t is time and u is intial (current) `_speed`. The method should not accelerate pas the `_top_speed` of the animal (use an if-statement to ensure). THis method should not return. 
+```
+parameter: 
+	acceraltion (float): the accelation to apply
+	time (float): the time fro which accelartion. 
+```
+
+```
+def speed_up(self, acceleration: float, time: float) -> None:
+        """
+        Updates the current speed using v = u + at. 
+        Will not exceed the top speed.
+
+        Parameters:
+            acceleration (float): The acceleration to apply.
+            time (float): The time during which acceleration is applied.
+        """
+        new_speed = self._current_speed + (acceleration * time)
+        if new_speed > self._top_speed:
+            self._current_speed = self._top_speed
+        else:
+            self._current_speed = new_speed
+```
+
+Q6: impelment a method called get_distance() that calculates the distance travelled in the given time at the animals current speed. Use the equation distance = speed x time to computer this. 
+
+Paramater: 
+	time(float): the time of travel. 
+Return: 
+	(float): the distance travelling in the given time at the `_current_speed`
+
+```
+def get_distance(self, time):
+    """
+    Calculates the distance travelled in the given time at the animal's current speed.
+
+    Parameters:
+        time (float): The time of travel (in seconds).
+
+    Returns:
+        float: The distance travelled.
+    """
+    if time < 0:
+        raise ValueError("Time must be non-negative.")
+    
+    return self._current_speed * time
+
+```
+
+Q7: the standard representational method for an animal (ie the method that returns a string value for this animal.) In this case the returned string should concatenate the type of name of the animal with a dash between them. 
+Returns 
+	str : a string representation of this animal. 
+
+```
+def __str__(self):
+    """
+    Returns a string representation of the animal in the format 'type-name'.
+
+    Returns:
+        str: The type and name of the animal separated by a dash.
+    """
+    return f"{self._type}-{self._name}"
+
+```
+
+Q8: implement the init method for predoar pray. two animals (pred and prey). The idnetifoeir of the simulation, animals and sitance over which the sim will run should be assiend to vairables 
+`_id, _predator, _prey, _distance` reprectively. 
+params: 
+	id (str): The identifer of this simulation 
+	predator (animal): the predaotr animal. 
+	prey (animal): the prey animal 
+	distance (float): the length of the simulation 
+
+```
+class PredatorPreySimulation:
+    def __init__(self, id, predator, prey, distance):
+        """
+        Initializes the predator-prey simulation with given parameters.
+
+        Parameters:
+            id (str): The identifier of this simulation.
+            predator (Animal): The predator animal.
+            prey (Animal): The prey animal.
+            distance (float): The distance over which the simulation runs.
+        """
+        self._id = id
+        self._predator = predator
+        self._prey = prey
+        self._distance = distance
+
+```
+
+Q9: implenet this method so it prints the positivon of each animal to 2 deciaml places at 1 second intervals unitl both animals travelled the full distance of the simulation. use a loop to do this. assume that both animals accelarate at thier maximum possible rate. at the end of the simlation print out wether they catch. 
+```
+  def run(self):
+        """
+        Runs the simulation, printing positions every second until
+        both animals have finished or the predator catches the prey.
+        """
+        time = 0
+        predator_position = 0.0
+        prey_position = 0.0
+
+        predator_acceleration = self._predator._top_speed  # assume full speed in 1 sec
+        prey_acceleration = self._prey._top_speed
+
+        while predator_position < self._distance and prey_position < self._distance:
+            self._predator.speed_up(predator_acceleration, 1)
+            self._prey.speed_up(prey_acceleration, 1)
+
+            predator_position += self._predator.get_current_speed()
+            prey_position += self._prey.get_current_speed()
+
+            print(f"Time: {time}s")
+            print(f"Predator Position: {predator_position:.2f}")
+            print(f"Prey Position: {prey_position:.2f}\n")
+
+            time += 1
+
+            if predator_position >= prey_position:
+                print("The predator has caught the prey!")
+                return
+
+        print("The prey has escaped!")
+```
+
+The goal of the `run()` method is to **simulate a chase**
+- A predator is chasing a prey.
+- Both start at 0 speed.
+- Every second:
+    - They **speed up** (accelerate),
+    - Move forward (based on their current speed),
+    - Print their **positions**.
+- The simulation ends when:
+    - The **predator catches the prey**, or
+    - They both reach the total distance (prey escapes).
+
+Line by line: 
+```
+time = 0
+predator_position = 0.0
+prey_position = 0.0
+```
+time: simulation clock (starts at 0).
+predator_position: how far the predator has moved.
+prey_position: how far the prey has moved
+
+```
+    predator_acceleration = self._predator._top_speed
+    prey_acceleration = self._prey._top_speed
+```
+`self._predator._top_speed` accesses the **top speed** of the predator animal in the simulation by chaining through the simulation's `_predator` (an `Animal` object) to its `_top_speed` attribute 
+
+```
+ while predator_position < self._distance and prey_position < self._distance:
+```
+while predator_position < self._distance and prey_position < self._distance:
+	The loop continues while neither animal has reached the simulation distance.
+	This loop represents each second in the simulation.
+
+```
+		self._predator.speed_up(predator_acceleration, 1)
+        self._prey.speed_up(prey_acceleration, 1)
+```
+Both animals increase their speed using speed = speed + acceleration × time.
+Time is 1 second for each loop iteration.
+
+```
+Predator_position += self._predator.get_current_speed()
+prey_position += self._prey.get_current_speed()
+```
+Moves each animal forward by speed × time (1 second).
+Since time is 1 second, it just adds their current speed to their position.
+
+```
+if predator_position >= prey_position:
+            print("The predator has caught the prey!")
+            return
+```
+
+- If the predator **reaches or passes** the prey, it catches it.
+- Ends the simulation by returning.
+
+`` print("The prey has escaped!")`
+If the predator never caught the prey, but the loop ends (i.e., both animals reached the distance),
+Then the prey escapes, and we print this.
+
+
+q10: implrment test case for normal, one boundary, one abnormal  of the get ditance method in the animal class. 
+
+
+Test case 1: 
+```
+animal1 = Animal("Bolt", "Cheetah", 30)
+animal1._current_speed = 10
+print("Normal Case:", animal1.get_distance(4))  # Expected: 40
+```
+
+Test case 2: Tests when time is zero (no travel).
+```
+animal2 = Animal("Zoom", "Gazelle", 25)
+animal2._current_speed = 25
+print("Boundary Case:", animal2.get_distance(0))  # Expected: 0
+
+```
+
+Test case 3: Abnormal Test: 
+```
+animal3 = Animal("Shadow", "Panther", 40)
+animal3._current_speed = 15
+
+try:
+    print("Abnormal Case:", animal3.get_distance(-2))  # Expected: Error
+except ValueError as e:
+    print("Abnormal Case: Caught error:", e)
+
+```
+
+Therefore = 
+
+```
+Normal Case: 40
+Boundary Case: 0
+Abnormal Case: Caught error: Time must be non-negative.
+```
