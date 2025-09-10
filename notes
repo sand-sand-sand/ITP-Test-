@@ -273,3 +273,16 @@ Normal Case: 40
 Boundary Case: 0
 Abnormal Case: Caught error: Time must be non-negative.
 ```
+def get_distance(self, time):
+    """
+    Calculates the distance travelled by the animal over a given time.
+
+    Parameters:
+        time (float): Time in seconds the animal has been moving.
+
+    Returns:
+        float: The distance covered at the current speed over the given time.
+
+    Raises:
+        ValueError: If time is negative.
+    """
